@@ -1,20 +1,62 @@
-import BetaForm from "./BetaForm";
+"use client";
+
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function CTA() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+
+    const { error } = await supabase.from("beta_requests").insert([
+      { email }
+    ]);
+
+    if (error) {
+      console.error(error);
+      setStatus("error");
+    } else {
+      setStatus("success");
+      setEmail("");
+    }
+  }
+
   return (
-    <section
-      id="beta"
-      className="py-32 px-6 text-center bg-black text-white"
-    >
-      <h2 className="text-4xl font-bold mb-6">
-        Join the Closed Beta
-      </h2>
+    <section className="w-full py-20 flex justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 max-w-md w-full"
+      >
+        <input
+          type="email"
+          required
+          placeholder="your@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="px-4 py-3 rounded-md text-black"
+        />
 
-      <p className="text-gray-300 mb-10 max-w-xl mx-auto">
-        Be among the first organizers and drivers shaping the future of sim racing.
-      </p>
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="bg-white text-black font-semibold py-3 rounded-md"
+        >
+          {status === "loading" ? "Sending..." : "Request access"}
+        </button>
 
-      <BetaForm />
+        {status === "success" && (
+          <p className="text-green-400 text-sm">You're on the list 🚀</p>
+        )}
+
+        {status === "error" && (
+          <p className="text-red-400 text-sm">
+            Something went wrong. Try again.
+          </p>
+        )}
+      </form>
     </section>
   );
 }
