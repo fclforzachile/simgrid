@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
+
 export default function AdminPage() {
   return (
     <main style={{ padding: 40 }}>
-      <h1>Admin OK</h1>
-      <p>Si ves esto, la ruta funciona.</p>
+      <h1>Admin SimGrid</h1>
+      <p>Ruta admin OK</p>
     </main>
   );
 }
