@@ -25,38 +25,38 @@ export default function CTA() {
   }
 
   return (
-    <section className="w-full py-20 flex justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 max-w-md w-full"
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-md flex flex-col gap-4"
+    >
+      <input
+        type="email"
+        required
+        placeholder="your@email.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="px-4 py-3 rounded-md text-black"
+      />
+
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="bg-white text-black font-semibold py-3 rounded-md hover:opacity-90 transition"
       >
-        <input
-          type="email"
-          required
-          placeholder="your@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="px-4 py-3 rounded-md text-black"
-        />
+        {status === "loading" ? "Sending..." : "Request access"}
+      </button>
 
-        <button
-          type="submit"
-          disabled={status === "loading"}
-          className="bg-white text-black font-semibold py-3 rounded-md"
-        >
-          {status === "loading" ? "Sending..." : "Request access"}
-        </button>
+      {status === "success" && (
+        <p className="text-green-400 text-sm">
+          You're on the list 🚀
+        </p>
+      )}
 
-        {status === "success" && (
-          <p className="text-green-400 text-sm">You're on the list 🚀</p>
-        )}
-
-        {status === "error" && (
-          <p className="text-red-400 text-sm">
-            Something went wrong. Try again.
-          </p>
-        )}
-      </form>
-    </section>
+      {status === "error" && (
+        <p className="text-red-400 text-sm">
+          Something went wrong. Try again.
+        </p>
+      )}
+    </form>
   );
 }
